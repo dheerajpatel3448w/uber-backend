@@ -2,7 +2,7 @@
 import { User } from "../models/user.model.js";
 import { createuser ,generateaccesstokenandrefreshtoken } from "../service/user.service.js";
 import { validationResult } from "express-validator";
-
+import { Blacklist } from "../models/blacklist.model.js";
 export const registerUser = async (req,res,next)=>{
     const errrors = validationResult(req);
     if(!errrors.isEmpty()){
@@ -62,4 +62,37 @@ return res.status(200).cookie('accessToken',accesstoken,options).cookie('refresh
 })
 
   
+}
+
+export const userprofile = (req,res) => {
+    return res.status(200).json({
+        user:req.user,
+        success:true
+    })
+  
+}
+export const userLogout = async(req,res) => {
+  const token = req.cookies.accessToken||req.headers.authorization.replace("Bearer  ","");
+  await Blacklist.create({token});
+   const user= req.user._id;
+  const op =  await User.findByIdAndUpdate(user,{
+    $unset:{
+      refreshToken:1
+    },
+   
+  }, {
+    new:true,
+    runValidators:true
+  })
+
+const options={
+  httpOnly:true,
+  secure:true,
+
+}
+  res.status(200).clearCookie('accessToken',options).clearCookie('refreshToken',options).json({
+    message: "Logout successful",
+    success:true,
+  })
+
 }

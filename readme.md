@@ -148,3 +148,102 @@ curl -X POST http://localhost:<PORT>/api/v1/user/login \
 ```
 
 > **Note:** Replace `<PORT>` with your running server's port.
+
+---
+
+## /api/v1/user/profile
+
+### Description
+This endpoint retrieves the profile of the currently authenticated user. It requires a valid JWT token to be sent either via HTTP-only cookie or in the Authorization header.
+
+### Request
+
+**Method:** GET  
+**Endpoint:** `/api/v1/user/profile`
+
+#### Headers
+- **Authorization:** Bearer &lt;access token&gt; (optional if token is provided via cookie)
+- **Cookie:** accessToken (if not provided in header)
+
+### Response
+
+#### Success (HTTP 200)
+Returns the user profile details.
+
+```json
+{
+  "user": { /* user details returned by the server */ },
+  "success": true
+}
+```
+
+#### Error Responses
+
+- **HTTP 400 Bad Request:**  
+  - Returned when no token is provided or token validation fails.
+  ```json
+  {
+    "message": "user token not exist" 
+  }
+  ```
+- **HTTP 401 Unauthorized:**  
+  - Returned when the token is blacklisted or invalid.
+  ```json
+  {
+    "message": "unauthorize"
+  }
+  ```
+
+### Example cURL Command
+
+```bash
+curl -X GET http://localhost:<PORT>/api/v1/user/profile \
+  -H "Authorization: Bearer <access_token>" \
+  -H "Content-Type: application/json"
+```
+
+---
+
+## /api/v1/user/logout
+
+### Description
+This endpoint logs out the current user by blacklisting the active access token and clearing both the `accessToken` and `refreshToken` cookies from the client.
+
+### Request
+
+**Method:** GET  
+**Endpoint:** `/api/v1/user/logout`
+
+#### Headers
+- **Authorization:** Bearer &lt;access token&gt; (optional if token is provided via cookie)
+- **Cookie:** accessToken, refreshToken (if not provided in header)
+
+### Response
+
+#### Success (HTTP 200)
+On successful logout, the response confirms the user's session termination, and the authentication cookies are cleared.
+
+```json
+{
+  "message": "Logout successful",
+  "success": true
+}
+```
+
+#### Error Responses
+
+- **HTTP 400 Bad Request:**  
+  - Returned when the token is not provided or validation fails.
+  
+- **HTTP 401 Unauthorized:**  
+  - Returned when the token is already blacklisted or invalid.
+
+### Example cURL Command
+
+```bash
+curl -X GET http://localhost:<PORT>/api/v1/user/logout \
+  -H "Authorization: Bearer <access_token>" \
+  -H "Content-Type: application/json"
+```
+
+> **Note:** Replace `<PORT>` with your running server's port and `<access_token>` with a valid JWT token.

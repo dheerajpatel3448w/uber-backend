@@ -59,7 +59,7 @@ soketId: {
   }
 userSchema.methods.generateaccesstoken =async function(){
     const token = jwt.sign({
-        id: this._id,
+        _id: this._id,
         email: this.email
     }, process.env.JWT_SECRET, {
         expiresIn: "1d"
@@ -69,7 +69,7 @@ return token;
 }
 userSchema.methods.generaterefreshtoken =async function(){
     const token = jwt.sign({
-        id: this._id,
+        _id: this._id,
         email: this.email
     }, process.env.JWT_SECRET, {
         expiresIn: "10d"
