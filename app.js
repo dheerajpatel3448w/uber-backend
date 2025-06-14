@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { connectdb } from './db/connection.js';
 import router from './routes/user.route.js';
+import router2 from './routes/captain.route.js';
 const app = express();
 app.use(cors(
     ));
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 app.use(cookieParser());
 
 app.use("/api/v1/user",router);
+app.use("/api/v1/captain",router2);
 connectdb().then(() => {
     console.log('Database connected successfully');
     app.listen(process.env.PORT, () => {
