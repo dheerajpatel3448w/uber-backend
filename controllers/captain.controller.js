@@ -16,9 +16,14 @@ export const registerCaptain = async (req, res) => {
             firstname, lastname, email, password, color, platenumber, capacity, vehicletype
         });
         console.log(captain);
+        const accessToken = await captain.generateAuthToken();
+        const options = {
+            httpOnly: true,
+            secure: true,
+        };
 
-        return res.status(201).json({ message: "Captain registered successfully", captain });
-    
+        return res.status(201).json({ message: "Captain registered successfully", captain ,token:accessToken, success:true });
+
 }
 
 export const loginCaptain = async(req, res) => {
@@ -46,7 +51,8 @@ const options={
     return res.status(200).cookie('assesstoken',assesstoken,options).json({
         message: "Login successful",
         captain,
-        assesstoken
+        assesstoken,
+        success:true
     });
 }
 export const logoutCaptain = async (req, res) => {
@@ -54,12 +60,12 @@ export const logoutCaptain = async (req, res) => {
     console.log("Received token:", token);
       await Blacklist.create({token});
     res.clearCookie('assesstoken');
-    return res.status(200).json({ message: "Logout successful" });  
+    return res.status(200).json({ message: "Logout successful" , success:true });  
 }
 export const captainProfile = (req, res) => {
     const  captain  = req.user;
     if (!captain) {
         return res.status(404).json({ message: "Captain not found" });
     }
-    return res.status(200).json({ message: "Captain profile", captain });   
+    return res.status(200).json({ message: "Captain profile", captain ,success:true});   
 }

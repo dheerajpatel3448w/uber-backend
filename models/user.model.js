@@ -31,7 +31,7 @@ password:{
 refreshtoken:{
 type:String
 },
-soketId: {
+socketId: {
     type: String,
     default:null
   

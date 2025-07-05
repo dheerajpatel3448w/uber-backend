@@ -4,8 +4,17 @@ import cookieParser from 'cookie-parser';
 import { connectdb } from './db/connection.js';
 import router from './routes/user.route.js';
 import router2 from './routes/captain.route.js';
+import router3 from './routes/map.router.js';
+import router4 from './routes/ride.route.js';
+
 const app = express();
 app.use(cors(
+    {
+        origin: process.env.CLIENT_URL || 'http://localhost:5173',
+        credentials: true, // Allow cookies to be sent with requests
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization']
+    }
     ));
     app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,12 +25,8 @@ app.use(cookieParser());
 
 app.use("/api/v1/user",router);
 app.use("/api/v1/captain",router2);
-connectdb().then(() => {
-    console.log('Database connected successfully');
-    app.listen(process.env.PORT, () => {
-    console.log(`Server is running on http://localhost:${process.env.PORT}`);
-})
-}).catch((err) => {
-    console.error('Database connection failed:', err);
-});
+app.use("/api/v1/map",router3);
+app.use("/api/v1/ride",router4);
+
+export default app;
 

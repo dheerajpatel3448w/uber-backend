@@ -3,7 +3,7 @@ import { Router } from "express";
  import { registerCaptain ,loginCaptain, logoutCaptain,captainProfile} from "../controllers/captain.controller.js";
 import { verifyCaptain } from "../middlewares/verifyjwt.middleware.js";
 import jwt from "jsonwebtoken";
-const router2 = Router();
+const router2 = Router()
 
 router2.route('/register').post([
     body('email').isEmail().withMessage('Please enter a valid email address'),

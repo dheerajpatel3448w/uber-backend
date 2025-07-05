@@ -64,7 +64,7 @@ vehicle:{
 
 },
 location:{
-    llat:{
+    ltd:{
         type:Number,
         require:true
     },

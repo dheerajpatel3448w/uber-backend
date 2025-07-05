@@ -471,3 +471,108 @@ curl -X GET http://localhost:<PORT>/api/v1/captain/logout \
 ```
 
 > **Note:** Replace `<PORT>` with your running server's port and `<access_token>` with a valid
+
+## Ride Endpoints
+
+### /api/v1/ride/createride
+
+**POST** `/api/v1/ride/createride`
+
+Creates a new ride.
+
+**Request Body:**
+```json
+{
+  "pickup": "Pickup Address",
+  "destination": "Destination Address",
+  "vehicletype": "car" // or "bike", "auto"
+}
+```
+
+**Success Response (201):**
+```json
+{
+  "message": "ride created successfully",
+  "ride": { /* ride details */ },
+  "success": true
+}
+```
+
+---
+
+### /api/v1/ride/getfare
+
+**GET** `/api/v1/ride/getfare?pickup=<pickup>&destination=<destination>`
+
+Returns fare estimates for bike, auto, and car.
+
+**Success Response (200):**
+```json
+{
+  "message": "fare found successfully",
+  "data": {
+    "fare": {
+      "bike": 40,
+      "auto": 60,
+      "car": 100
+    },
+    "distance": 5000,
+    "duration": 900
+  },
+  "success": true
+}
+```
+
+---
+
+## Map Endpoints
+
+### /api/v1/map/get-coordinate
+
+**GET** `/api/v1/map/get-coordinate?address=<address>`
+
+Returns latitude and longitude for a given address.
+
+**Success Response (200):**
+```json
+{
+  "lat": 23.12345,
+  "lng": 72.12345
+}
+```
+
+---
+
+### /api/v1/map/get-distance-time
+
+**GET** `/api/v1/map/get-distance-time?origin=<origin>&destination=<destination>`
+
+Returns distance and duration between two locations.
+
+**Success Response (200):**
+```json
+{
+  "distance": { "text": "5 km", "value": 5000 },
+  "duration": { "text": "10 mins", "value": 600 }
+}
+```
+
+---
+
+### /api/v1/map/get-suggestions
+
+**GET** `/api/v1/map/get-suggestions?input=<input>`
+
+Returns address/place suggestions for autocomplete.
+
+**Success Response (200):**
+```json
+[
+  { "description": "Place 1", ... },
+  { "description": "Place 2", ... }
+]
+```
+
+---
+
+> **Note:** All protected routes require a valid JWT token via HTTP-only cookie or `Authorization` header
